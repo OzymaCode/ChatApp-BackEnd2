@@ -25,7 +25,8 @@ app.use(express.json())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 app.get('/', (req, res) => {
   users = []
-  res.sendFile(__dirname + '/client/public/index.html')
+  // res.sendFile(__dirname + '/client/public/index.html')
+  res.send('success nice!')
 })
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
