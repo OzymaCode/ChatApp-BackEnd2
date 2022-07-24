@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+let cors = require('cors')
+
+const bodyParser = require('body-parser')
 require('dotenv').config()
 const Schema = mongoose.Schema
 
@@ -30,8 +33,9 @@ const messageSchema = new Schema(
   { timestamps: true },
 )
 
+const jsonParser = bodyParser.json()
 const Message = mongoose.model('Message', messageSchema)
-
+app.use(cors())
 app.use(express.json())
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -43,8 +47,7 @@ app.use(express.json())
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 app.get('/', (req, res) => {
   users = []
-  // res.sendFile(__dirname + '/client/public/index.html')
-  res.send('success nice!')
+  res.sendFile(__dirname + '/client/public/index.html')
 })
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,7 +57,7 @@ app.get('/', (req, res) => {
 * Date	        6/15/2022
 * @res.json     array users
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-app.get('/users', (req, res) => {
+app.get('/users', jsonParser, (req, res) => {
   User.find()
     .then((result) => {
       res.json(result)
@@ -73,7 +76,7 @@ app.get('/users', (req, res) => {
 * @req.body     {username: req.body.username, password: req.body.password}
 * @res.json     {username: req.body.username, password: req.body.password}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-app.post('/users/signup', (req, res) => {
+app.post('/users/signup', jsonParser, (req, res) => {
   const user = new User({
     username: req.body.username,
     password: req.body.password,
@@ -98,7 +101,7 @@ app.post('/users/signup', (req, res) => {
 * @req.body     {username: req.body.username, password: req.body.password}
 * @res.json     { 'status' : status, 'statusCode': statusCode }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-app.post('/users/login', (req, res) => {
+app.post('/users/login', jsonParser, (req, res) => {
   let status = ''
   let statusCode = -1
   let thisUser
@@ -144,7 +147,7 @@ app.get('/clear', (req, res) => {
 * @req          { username: req.body.username, message: req.body.message }
 * @res.json     { username: req.body.username, message: req.body.message }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-app.post('/users/post', (req, res) => {
+app.post('/users/post', jsonParser, (req, res) => {
   const message = new Message({
     username: req.body.username,
     message: req.body.message,
