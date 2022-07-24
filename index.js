@@ -1,10 +1,8 @@
 const express = require('express')
 const app = express()
-let bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
-const User = require('./models/user')
-const Message = require('./models/message')
 require('dotenv').config()
+const Schema = mongoose.Schema
 
 // connect to mongodb
 let dbURI =
@@ -13,6 +11,26 @@ mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then((result) => app.listen(process.env.PORT || 5000))
   .catch((error) => console.log(error))
+
+const userSchema = new Schema(
+  {
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+  },
+  { timestamps: true },
+)
+
+const User = mongoose.model('User', userSchema)
+
+const messageSchema = new Schema(
+  {
+    username: { type: String, required: true },
+    message: { type: String, required: true },
+  },
+  { timestamps: true },
+)
+
+const Message = mongoose.model('Message', messageSchema)
 
 app.use(express.json())
 
