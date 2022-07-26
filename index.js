@@ -81,14 +81,24 @@ app.post('/users/signup', jsonParser, (req, res) => {
     username: req.body.username,
     password: req.body.password,
   })
-  user
-    .save()
-    .then((result) => {
-      res.json(result)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+
+  User.findOne({ username: req.body.username }, (error, thisUser) => {
+    if (error) {
+    } else {
+      if (thisUser == null) {
+        user
+          .save()
+          .then((result) => {
+            res.json(result)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        res.json({ status: '1' })
+      }
+    }
+  })
 })
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
