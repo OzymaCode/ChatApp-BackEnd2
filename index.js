@@ -82,6 +82,8 @@ app.post('/users/signup', jsonParser, (req, res) => {
     password: req.body.password,
   })
 
+  console.log('test')
+
   User.findOne({ username: req.body.username }, (error, thisUser) => {
     if (error) {
     } else {
